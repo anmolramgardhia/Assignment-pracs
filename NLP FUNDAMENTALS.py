@@ -20,3 +20,12 @@ params = (
 
 z1, h1, z2 = forward_pass(x_batch, params)
 print(z1 , h1 , z2) 
+
+
+
+
+
+
+
+
+
