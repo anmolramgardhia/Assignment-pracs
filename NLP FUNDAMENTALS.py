@@ -21,11 +21,28 @@ params = (
 z1, h1, z2 = forward_pass(x_batch, params)
 print(z1 , h1 , z2) 
 
+# Now we will implement the same thing using tensorflow
+import tensorflow as tf
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
 
+X , y = make_moons(n_estimators = 1000 , learning_rate = 0.01 , random_state=42)
+X_train , X_test , y_train , y_test = train_test_split(X , y , stratify = y , random_state= 42)
 
+scaler = StandardScaler().fit(X_train)
+X_train_scaled = scaler.fit_transform(X_train)
+x_test_scaled = scaler.transform(X_test)
 
+model = tf.keras.Sequential([
+    tf.keras.layers.inputs(shape=(2 , )) ,
+    tf.keras.layers.Dense(32 , activation = 'relu') , 
+    tf.keras.layers.Dense(16 , activation = 'relu') , 
+    tf.keras.layers.Dense(1 , activation = 'sigmoid')
+])
 
+model.compile(optimizer = tf.keras.optimizers.Adam(learning_rate = 0.01),
+              Loss = tf.keras.Losses .BinaryCrossentropy() ,
+               metrics = ['accuracy'] )
 
-
-
-
+model.utils.plotmodels(model , show_shapes = True)
