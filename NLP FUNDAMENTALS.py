@@ -36,10 +36,10 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled =  scaler.fit_transform(X_test)
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Input((2 , )) , 
-    tf.keras.layers.Dense((32 , activation= 'relu')) , 
-    tf.keras.layers.Dense((16 , activation= 'relu')),
-    tf.keras.layers.Dense((1 , activation= 'sigmoid'))
+    tf.keras.layers.Input(2 , ) , 
+    tf.keras.layers.Dense(32 , activation= 'relu') , 
+    tf.keras.layers.Dense(16 , activation= 'relu'),
+    tf.keras.layers.Dense(1 , activation= 'sigmoid')
  ])
 
 model.compile(Optimizer= tf.keras.optimizers.Adam(learning_rate = 0.01), 
