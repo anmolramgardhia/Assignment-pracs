@@ -98,3 +98,43 @@ db2 = np.sum(dz2, axis=0)
 print(y_pred[:5].flatten())
 print(f"Loss: {loss:.6f}")
 print(f"norm(dW2): {np.linalg.norm(dW2):.6f}")
+
+
+
+# que 1 
+
+import torch
+import torch.nn as nn
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+model = None
+vocab = {"<PAD>": 0, "<UNK>": 1}
+MAX_LENGTH = 50
+
+app = FastAPI()
+def preprocess_text(text: str, vocab: Dict[str, int], max_length: int) -> torch.Tensor:
+    text = text.lower()
+    tokens = text.split()
+    indices = [vocab.get(token, vocab.get("<UNK>", 1)) for token in tokens]
+
+    if len(indices) > max_length:
+        indices = indices[:max_length]
+    else:
+        padding = [vocab.get("<PAD>", 0)] * (max_length - len(indices)) 
+        indices = indices + padding
+
+    return torch.tensor([indices], dtype=torch.long)
+class PredictionRequest(BaseModel):
+    text: str
+
+class PredictionResponse(BaseModel):
+    label: str
+    confidence: float ,
+
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(request: PredictionRequest):
+    input_tensor = preprocess_text(request.text, vocab, MAX_LENGTH)
+    with torch.no_grad():
+
+        if model is None:
